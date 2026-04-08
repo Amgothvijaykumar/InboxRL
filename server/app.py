@@ -63,15 +63,11 @@ class EmailTriageEnv:
         # Score reply quality (if provided and needed)
         reply_score = 0.0
         if action.draft_reply and self.state['gold_label'] == 'needs_reply':
-            # Simple heuristic: reward length and acknowledgment
-            words = len(action.draft_reply.split())
-            has_ack = any(word.lower() in action.draft_reply.lower() 
-                         for word in ['acknowledge', 'received', 'thank', 'appreciate'])
-            reply_score = min(1.0, (words / 50.0) * 0.5 + (0.5 if has_ack else 0.0))
+            reply_score = self.score_reply(action.draft_reply, self.state['rubric'])
         elif not action.draft_reply and self.state['gold_label'] == 'needs_reply':
             reply_score = 0.0  # Penalize missing reply
         elif action.draft_reply and self.state['gold_label'] != 'needs_reply':
-            reply_score = 0.3  # Penalize unnecessary reply
+            reply_score = 0.2  # Penalize unnecessary reply
 
         # Combined reward: 60% label + 40% reply
         reward = 0.6 * label_score + 0.4 * reply_score
@@ -92,6 +88,57 @@ class EmailTriageEnv:
                 'predicted_label': action.label,
             }
         )
+
+    def score_reply(self, draft_reply: str, rubric: dict) -> float:
+        """
+        Score reply quality using heuristic-based evaluation.
+        Checks: tone, required keywords, and length constraints.
+        
+        Returns: Float between 0.0 and 1.0
+        """
+        score_components = []
+        
+        # 1. Length check (25%)
+        words = len(draft_reply.split())
+        max_words = rubric.get('max_words', 100)
+        if words <= max_words:
+            length_score = min(1.0, words / (max_words * 0.8))  # Reward 80% of max
+        else:
+            length_score = max(0.0, 1.0 - (words - max_words) / max_words)
+        score_components.append(length_score * 0.25)
+        
+        # 2. Must-include check (50%)
+        must_include = rubric.get('must_include', [])
+        if must_include:
+            reply_lower = draft_reply.lower()
+            found_count = sum(1 for phrase in must_include if phrase.lower() in reply_lower)
+            include_score = found_count / len(must_include) if must_include else 1.0
+            score_components.append(include_score * 0.50)
+        else:
+            score_components.append(0.50)
+        
+        # 3. Keywords check (25%)
+        keywords = rubric.get('keywords', [])
+        if keywords:
+            reply_lower = draft_reply.lower()
+            found_count = sum(1 for keyword in keywords if keyword.lower() in reply_lower)
+            keyword_score = found_count / len(keywords) if keywords else 1.0
+            score_components.append(keyword_score * 0.25)
+        else:
+            score_components.append(0.25)
+        
+        # 4. Tone consistency (implicit from rubric)
+        tone = rubric.get('tone', '').lower()
+        if 'formal' in tone and any(word in draft_reply.lower() for word in ['please', 'thank', 'appreciate', 'regards']):
+            score_components.append(0.10)
+        elif 'casual' in tone and any(word in draft_reply.lower() for word in ['hi', 'hey', 'cheers', 'thanks']):
+            score_components.append(0.10)
+        else:
+            score_components.append(0.05)
+        
+        # Combine all components  (normalized to 0-1)
+        final_score = sum(score_components) 
+        return round(min(1.0, max(0.0, final_score)), 2)
 
     def get_state(self) -> dict:
         """Return current state (excluding gold labels)"""

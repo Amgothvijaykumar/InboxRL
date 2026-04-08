@@ -143,7 +143,7 @@ Respond in this exact JSON format:
 
 
 async def main() -> None:
-    """Main inference loop"""
+    """Main inference loop - Multi-episode evaluation"""
     # Verify configuration
     if not API_KEY:
         print("[ERROR] OPENAI_API_KEY not set", flush=True)
@@ -156,50 +156,84 @@ async def main() -> None:
 
     http_client = httpx.Client()
     
-    rewards: List[float] = []
-    steps_taken = 0
-    score = 0.0
-    success = False
-
+    # Multi-episode tracking
+    num_episodes = 10  # Run 10 episodes for robust evaluation
+    all_rewards: List[float] = []
+    episode_scores: List[float] = []
+    total_steps = 0
+    
     log_start(task=TASK_NAME, env=BENCHMARK, model=MODEL_NAME)
 
     try:
-        # Reset environment
-        observation = await reset_env(http_client)
+        for episode in range(1, num_episodes + 1):
+            episode_rewards: List[float] = []
+            
+            try:
+                # Reset environment for new episode
+                observation = await reset_env(http_client)
+                task_id = observation.get('task_id', 'unknown')
+                difficulty = observation.get('difficulty', 'unknown')
+                
+                # Run single episode
+                for step in range(1, MAX_STEPS + 1):
+                    # Get action from model
+                    action = get_model_action(client, observation, step)
+                    
+                    # Execute action
+                    result = await step_env(http_client, action)
+                    
+                    reward = result.get("reward", 0.0)
+                    done = result.get("done", False)
+                    
+                    episode_rewards.append(reward)
+                    all_rewards.append(reward)
+                    total_steps += 1
+
+                    log_step(
+                        step=episode * 1000 + step,  # Global step counter
+                        action=json.dumps(action),
+                        reward=reward,
+                        done=done
+                    )
+
+                    if done:
+                        break
+                
+                # Calculate episode score
+                episode_score = sum(episode_rewards) / MAX_TOTAL_REWARD if MAX_TOTAL_REWARD > 0 else 0.0
+                episode_score = min(max(episode_score, 0.0), 1.0)
+                episode_scores.append(episode_score)
+                
+                if episode % 3 == 0:
+                    print(f"[DEBUG] Episode {episode}/{num_episodes}: Score={episode_score:.2f}, Task={task_id}, Difficulty={difficulty}", flush=True)
+                
+            except Exception as e:
+                print(f"[DEBUG] Episode {episode} error: {e}", flush=True)
+                episode_scores.append(0.0)
+                continue
+
+        # Calculate aggregate score across all episodes
+        avg_score = sum(episode_scores) / len(episode_scores) if episode_scores else 0.0
+        avg_reward = sum(all_rewards) / len(all_rewards) if all_rewards else 0.0
+        success = avg_score >= SUCCESS_SCORE_THRESHOLD
         
-        for step in range(1, MAX_STEPS + 1):
-            # Get action from model
-            action = get_model_action(client, observation, step)
-            
-            # Execute action
-            result = await step_env(http_client, action)
-            
-            reward = result.get("reward", 0.0)
-            done = result.get("done", False)
-            
-            rewards.append(reward)
-            steps_taken = step
-
-            log_step(
-                step=step,
-                action=json.dumps(action),
-                reward=reward,
-                done=done
-            )
-
-            if done:
-                break
-
-        # Calculate score
-        score = sum(rewards) / MAX_TOTAL_REWARD if MAX_TOTAL_REWARD > 0 else 0.0
-        score = min(max(score, 0.0), 1.0)  # clamp to [0, 1]
-        success = score >= SUCCESS_SCORE_THRESHOLD
+        print(f"[DEBUG] === FINAL RESULTS ===", flush=True)
+        print(f"[DEBUG] Episodes: {len(episode_scores)}/{num_episodes}", flush=True)
+        print(f"[DEBUG] Average Score: {avg_score:.2f}", flush=True)
+        print(f"[DEBUG] Average Reward: {avg_reward:.2f}", flush=True)
+        print(f"[DEBUG] Total Steps: {total_steps}", flush=True)
+        print(f"[DEBUG] Success: {success}", flush=True)
 
     except Exception as e:
-        print(f"[DEBUG] Error in main loop: {e}", flush=True)
+        print(f"[DEBUG] Critical error in main loop: {e}", flush=True)
+        avg_score = 0.0
+        success = False
+        all_rewards = []
+        total_steps = 0
+        
     finally:
         http_client.close()
-        log_end(success=success, steps=steps_taken, score=score, rewards=rewards)
+        log_end(success=success, steps=total_steps, score=avg_score, rewards=all_rewards)
 
 
 if __name__ == "__main__":
