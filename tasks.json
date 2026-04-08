@@ -1,0 +1,80 @@
+[
+  {
+    "task_id": "easy_spam_001",
+    "difficulty": "easy",
+    "subject": "FREE MONEY - Click here now!!!",
+    "sender": "noreply@spam.com",
+    "body": "Congratulations! You've won $1,000,000! Click this link to claim your prize immediately. Act now before it's gone!",
+    "gold_label": "junk",
+    "rubric": {
+      "tone": "casual",
+      "keywords": ["free", "click", "immediately"],
+      "max_words": 50
+    }
+  },
+  {
+    "task_id": "easy_urgent_001",
+    "difficulty": "easy",
+    "subject": "CRITICAL: Production database down",
+    "sender": "oncall@company.com",
+    "body": "Production PostgreSQL cluster is down. All services returning 503. Starting failover now. ETA 5 minutes.",
+    "gold_label": "urgent",
+    "rubric": {
+      "tone": "formal",
+      "keywords": ["critical", "down", "urgent"],
+      "max_words": 80
+    }
+  },
+  {
+    "task_id": "medium_fyi_001",
+    "difficulty": "medium",
+    "subject": "RE: Q2 planning update",
+    "sender": "manager@company.com",
+    "body": "Hi team, just completed the Q2 budget forecast. Shared in the wiki. FYI, no immediate action required. Review at your convenience.",
+    "gold_label": "fyi",
+    "rubric": {
+      "tone": "professional",
+      "keywords": ["FYI", "shared", "no action"],
+      "max_words": 100
+    }
+  },
+  {
+    "task_id": "medium_reply_001",
+    "difficulty": "medium",
+    "subject": "Can you review the API design doc?",
+    "sender": "engineer@company.com",
+    "body": "Hi, I've drafted a new REST API design for the payment service. Would appreciate your feedback on the schema and error handling approach. Target deployment is next sprint.",
+    "gold_label": "needs_reply",
+    "rubric": {
+      "tone": "professional",
+      "must_include": ["acknowledge", "feedback"],
+      "max_words": 150
+    }
+  },
+  {
+    "task_id": "hard_ambiguous_001",
+    "difficulty": "hard",
+    "subject": "Great, another meeting",
+    "sender": "coworker@company.com",
+    "body": "Just scheduled a sync for tomorrow at 3pm to discuss the new feature proposal. Your perspective on the timeline would be valuable. Let me know if you can make it.",
+    "gold_label": "needs_reply",
+    "rubric": {
+      "tone": "casual",
+      "must_include": ["confirm", "availability"],
+      "max_words": 100
+    }
+  },
+  {
+    "task_id": "hard_ambiguous_002",
+    "difficulty": "hard",
+    "subject": "Re: Quarterly review process",
+    "sender": "hr@company.com",
+    "body": "Sharing the updated review template with everyone. Same format as last year, just updated criteria. Check it out when you have time.",
+    "gold_label": "fyi",
+    "rubric": {
+      "tone": "professional",
+      "keywords": ["sharing", "when you have time"],
+      "max_words": 80
+    }
+  }
+]

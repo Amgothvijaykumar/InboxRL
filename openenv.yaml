@@ -1,0 +1,101 @@
+name: email_triage_agent
+version: 1.0.0
+description: "Real-world email triage and smart reply environment"
+
+environment:
+  docker_image: email_triage_agent
+  python_version: "3.11"
+  
+endpoints:
+  reset: /reset
+  step: /step
+  state: /state
+
+tasks:
+  - id: easy_classification
+    name: Easy Email Classification
+    difficulty: easy
+    description: Identify obvious spam and urgent emails
+    count: 2
+    
+  - id: medium_classification
+    name: Medium Email Classification
+    difficulty: medium
+    description: Classify mixed signals and context-dependent emails
+    count: 2
+    
+  - id: hard_classification
+    name: Hard Email Classification
+    difficulty: hard
+    description: Handle ambiguous cases requiring context and inference
+    count: 2
+
+models:
+  observation:
+    type: EmailObservation
+    fields:
+      - name: task_id
+        type: string
+        description: Unique task identifier
+      - name: subject
+        type: string
+        description: Email subject line
+      - name: sender
+        type: string
+        description: Sender identifier
+      - name: body
+        type: string
+        description: Email body content
+      - name: difficulty
+        type: string
+        enum: ["easy", "medium", "hard"]
+        description: Task difficulty level
+        
+  action:
+    type: EmailAction
+    fields:
+      - name: label
+        type: string
+        enum: ["urgent", "needs_reply", "fyi", "junk"]
+        description: Email classification label
+      - name: draft_reply
+        type: string
+        nullable: true
+        description: Optional draft reply (required if label is needs_reply)
+        
+  reward:
+    type: EmailReward
+    fields:
+      - name: label_score
+        type: float
+        min: 0.0
+        max: 1.0
+        description: Accuracy of label classification
+      - name: reply_score
+        type: float
+        min: 0.0
+        max: 1.0
+        description: Quality of draft reply (if applicable)
+      - name: reward
+        type: float
+        min: 0.0
+        max: 1.0
+        description: Combined reward signal (0.6*label + 0.4*reply)
+      - name: done
+        type: boolean
+        description: Episode termination flag
+      - name: info
+        type: object
+        description: Additional metadata
+
+constraints:
+  max_episode_steps: 1
+  max_runtime_seconds: 300
+  required_api_key: OPENAI_API_KEY
+  required_model: MODEL_NAME
+  base_url: API_BASE_URL
+
+success_criteria:
+  min_score: 0.7
+  baseline_score: 0.6
+  evaluation_metric: average_reward
