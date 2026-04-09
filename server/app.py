@@ -2,9 +2,14 @@
 import json
 import random
 import os
+import sys
+import traceback
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
+
+# Add parent directory to path to ensure imports work
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from models import EmailObservation, EmailAction, EmailReward
 
@@ -155,7 +160,16 @@ class EmailTriageEnv:
 
 
 # Global environment instance
-env = EmailTriageEnv()
+env = None
+init_error = None
+
+try:
+    env = EmailTriageEnv()
+    print("✓ Environment initialized successfully")
+except Exception as e:
+    init_error = str(e)
+    print(f"✗ Error initializing environment: {e}", file=sys.stderr)
+    traceback.print_exc()
 
 # FastAPI app
 app = FastAPI(
@@ -190,30 +204,43 @@ async def root():
 @app.post("/reset")
 async def reset():
     """Reset environment and return initial observation"""
+    if env is None:
+        raise HTTPException(status_code=500, detail=f"Environment not initialized: {init_error}")
     try:
         observation = env.reset()
         return observation.model_dump()
     except Exception as e:
+        print(f"✗ Error in /reset: {e}", file=sys.stderr)
+        traceback.print_exc()
         raise HTTPException(status_code=500, detail=str(e))
 
 
 @app.post("/step")
 async def step(action: EmailAction):
     """Process action and return reward"""
+    if env is None:
+        raise HTTPException(status_code=500, detail=f"Environment not initialized: {init_error}")
     try:
         reward_data = env.step(action)
         return reward_data.model_dump()
     except Exception as e:
+        print(f"✗ Error in /step: {e}", file=sys.stderr)
+        traceback.print_exc()
         raise HTTPException(status_code=500, detail=str(e))
 
 
 @app.get("/state")
 async def state():
     """Return current environment state"""
+    if env is None:
+        raise HTTPException(status_code=500, detail=f"Environment not initialized: {init_error}")
     try:
         return env.get_state()
     except Exception as e:
+        print(f"✗ Error in /state: {e}", file=sys.stderr)
+        traceback.print_exc()
         raise HTTPException(status_code=500, detail=str(e))
+
 
 
 if __name__ == "__main__":
