@@ -1,25 +1,44 @@
 """Email Triage Environment - OpenEnv Models"""
-from typing import Optional, Literal
+from typing import Optional, Literal, List
 from pydantic import BaseModel, Field
 
+try:
+    from openm.engine.types import Action, Observation, State
+except ImportError:
+    # Fallback for development without openm-core
+    Action = BaseModel
+    Observation = BaseModel
+    State = BaseModel
 
-class EmailObservation(BaseModel):
-    """What the agent sees"""
+
+class EmailObservation(Observation):
+    """What the agent sees: email content"""
     task_id: str = Field(..., description="Task identifier")
     subject: str = Field(..., description="Email subject")
     sender: str = Field(..., description="Sender email/name")
     body: str = Field(..., description="Email body content")
     difficulty: Literal["easy", "medium", "hard"] = Field(..., description="Task difficulty")
+    thread_history: List[str] = Field(default_factory=list, description="Previous messages in thread")
+    timestamp: str = Field(..., description="ISO format timestamp")
 
 
-class EmailAction(BaseModel):
-    """What the agent outputs"""
+class EmailAction(Action):
+    """Agent's output: classification + optional draft reply"""
     label: Literal["urgent", "needs_reply", "fyi", "junk"] = Field(
         ..., description="Email classification"
     )
     draft_reply: Optional[str] = Field(
         None, description="Optional draft reply if label is needs_reply"
     )
+
+
+class EmailState(State):
+    """Full internal environment state (hidden from agent)"""
+    current_email: EmailObservation
+    gold_label: str = Field(..., description="Ground truth label (hidden)")
+    gold_reply_rubric: dict = Field(default_factory=dict, description="Evaluation rubric (hidden)")
+    step_count: int = 0
+    done: bool = False
 
 
 class EmailReward(BaseModel):

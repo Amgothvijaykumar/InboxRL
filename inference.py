@@ -12,9 +12,23 @@ from openai import OpenAI
 
 
 # Configuration from environment
-API_BASE_URL = os.environ.get("API_BASE_URL", "https://api.openai.com/v1")
-API_KEY = os.environ.get("OPENAI_API_KEY", "")
-MODEL_NAME = os.environ.get("MODEL_NAME", "gpt-3.5-turbo")
+# Support both OpenAI and Grok API
+GROK_API_KEY = os.environ.get("GROK_API_KEY", "")
+OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY", "")
+
+if GROK_API_KEY:
+    # Use Grok API via xai-org endpoint
+    API_BASE_URL = "https://api.x.ai/v1"
+    API_KEY = GROK_API_KEY
+    MODEL_NAME = os.environ.get("MODEL_NAME", "grok-3")
+    PROVIDER = "Grok"
+else:
+    # Use OpenAI API
+    API_BASE_URL = os.environ.get("API_BASE_URL", "https://api.openai.com/v1")
+    API_KEY = OPENAI_API_KEY
+    MODEL_NAME = os.environ.get("MODEL_NAME", "gpt-3.5-turbo")
+    PROVIDER = "OpenAI"
+
 HF_TOKEN = os.environ.get("HF_TOKEN", "")
 ENV_URL = os.environ.get("ENV_URL", "http://localhost:8000")
 
@@ -146,12 +160,12 @@ async def main() -> None:
     """Main inference loop - Multi-episode evaluation"""
     # Verify configuration
     if not API_KEY:
-        print("[ERROR] OPENAI_API_KEY not set", flush=True)
+        print("[ERROR] Either OPENAI_API_KEY or GROK_API_KEY must be set", flush=True)
         sys.exit(1)
 
     client = OpenAI(
         api_key=API_KEY,
-        base_url=API_BASE_URL if API_BASE_URL != "https://api.openai.com/v1" else None
+        base_url=API_BASE_URL
     )
 
     http_client = httpx.Client()
@@ -162,6 +176,7 @@ async def main() -> None:
     episode_scores: List[float] = []
     total_steps = 0
     
+    print(f"[DEBUG] Using {PROVIDER} API with model: {MODEL_NAME}", flush=True)
     log_start(task=TASK_NAME, env=BENCHMARK, model=MODEL_NAME)
 
     try:

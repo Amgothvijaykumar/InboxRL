@@ -49,7 +49,9 @@ class EmailTriageEnv:
             subject=self.current_task['subject'],
             sender=self.current_task['sender'],
             body=self.current_task['body'],
-            difficulty=difficulty
+            difficulty=difficulty,
+            thread_history=self.current_task.get('thread_history', []),
+            timestamp=self.current_task.get('timestamp', '2025-04-08T00:00:00Z')
         )
 
     def step(self, action: EmailAction) -> EmailReward:

@@ -1,42 +1,1007 @@
 [
-  {"task_id": "easy_spam_001", "difficulty": "easy", "subject": "FREE MONEY - Click here now!!!", "sender": "noreply@spam.com", "body": "Congratulations! You've won $1,000,000! Click this link to claim your prize immediately. Act now before it's gone!", "gold_label": "junk", "rubric": {"tone": "casual", "keywords": ["free", "click", "immediately"], "max_words": 50}},
-  {"task_id": "easy_spam_002", "difficulty": "easy", "subject": "Your Amazon account has been compromised", "sender": "security@amaz0n.com", "body": "URGENT: Someone tried to access your account. Click here to verify your identity immediately or your account will be closed.", "gold_label": "junk", "rubric": {"tone": "formal", "keywords": ["verify", "urgent", "click"], "max_words": 60}},
-  {"task_id": "easy_spam_003", "difficulty": "easy", "subject": "100% OFF - Limited Time Only!", "sender": "deals@spammerz.com", "body": "Buy now and save 100%. This is a one-time offer. Stock is almost gone. Click below to purchase before we run out!", "gold_label": "junk", "rubric": {"tone": "casual", "keywords": ["limited", "100%", "click"], "max_words": 55}},
-  {"task_id": "easy_spam_004", "difficulty": "easy", "subject": "Lose Weight Fast - Doctors Hate This", "sender": "health@spammail.com", "body": "This one weird trick will make you lose 50 pounds in 1 week. Celebrities don't want you to know about this. Buy now!", "gold_label": "junk", "rubric": {"tone": "casual", "keywords": ["lose", "weight", "trick"], "max_words": 50}},
-  {"task_id": "easy_spam_005", "difficulty": "easy", "subject": "Work From Home - Make $5000/week", "sender": "jobs@scammail.net", "body": "No experience needed. No boss. Just sign up and start earning $5000/week. Click to begin your journey!", "gold_label": "junk", "rubric": {"tone": "casual", "keywords": ["work", "home", "$5000"], "max_words": 50}},
-  {"task_id": "easy_urgent_001", "difficulty": "easy", "subject": "CRITICAL: Production database down", "sender": "oncall@company.com", "body": "Production PostgreSQL cluster is down. All services returning 503. Starting failover now. ETA 5 minutes.", "gold_label": "urgent", "rubric": {"tone": "formal", "keywords": ["critical", "down", "urgent"], "max_words": 80}},
-  {"task_id": "easy_urgent_002", "difficulty": "easy", "subject": "SECURITY ALERT: Unauthorized API access detected", "sender": "security@company.com", "body": "Unauthorized attempts to access our API detected from 203.45.67.89. Rate limited and blocked. Investigating now.", "gold_label": "urgent", "rubric": {"tone": "formal", "keywords": ["security", "unauthorized", "alert"], "max_words": 70}},
-  {"task_id": "easy_urgent_003", "difficulty": "easy", "subject": "OUTAGE: Web servers not responding", "sender": "devops@company.com", "body": "All 5 web servers are down. Load balancer shows no healthy backends. Rebooting now. Sorry for disruption!", "gold_label": "urgent", "rubric": {"tone": "formal", "keywords": ["outage", "down", "urgent"], "max_words": 60}},
-  {"task_id": "easy_urgent_004", "difficulty": "easy", "subject": "EMERGENCY: Data center power failure", "sender": "dataops@provider.com", "body": "Primary data center lost power. Immediate cutover to backup in progress. ETA 2 min for full recovery.", "gold_label": "urgent", "rubric": {"tone": "formal", "keywords": ["emergency", "power", "urgent"], "max_words": 70}},
-  {"task_id": "easy_urgent_005", "difficulty": "easy", "subject": "CONTRACT: Signature needed by 5pm today", "sender": "legal@company.com", "body": "New vendor contract requires your signature to close the deal. Deadline is 5pm EST today. Please review and sign ASAP.", "gold_label": "urgent", "rubric": {"tone": "formal", "keywords": ["signature", "deadline", "today"], "max_words": 70}},
-  {"task_id": "medium_fyi_001", "difficulty": "medium", "subject": "RE: Q2 planning update", "sender": "manager@company.com", "body": "Hi team, just completed the Q2 budget forecast. Shared in the wiki. FYI, no immediate action required. Review at your convenience.", "gold_label": "fyi", "rubric": {"tone": "professional", "keywords": ["FYI", "shared", "no action"], "max_words": 100}},
-  {"task_id": "medium_fyi_002", "difficulty": "medium", "subject": "New office policy announcement", "sender": "hr@company.com", "body": "Starting next month, we're implementing flexible work hours. Full details are in the HR portal. Check it out when you get a chance.", "gold_label": "fyi", "rubric": {"tone": "professional", "keywords": ["announcement", "implementation", "check"], "max_words": 90}},
-  {"task_id": "medium_fyi_003", "difficulty": "medium", "subject": "Quarterly earnings report released", "sender": "investor@company.com", "body": "Q1 2025 earnings report is now available on the investor relations page. Revenue up 20% YoY. Good news for the team!", "gold_label": "fyi", "rubric": {"tone": "professional", "keywords": ["report", "released", "available"], "max_words": 80}},
-  {"task_id": "medium_fyi_004", "difficulty": "medium", "subject": "Team lunch reminder - Tomorrow at noon", "sender": "ops@company.com", "body": "Just a reminder: Team lunch is tomorrow at noon at the Italian place downtown. RSVP if you haven't already. Should be fun!", "gold_label": "fyi", "rubric": {"tone": "casual", "keywords": ["reminder", "lunch", "tomorrow"], "max_words": 70}},
-  {"task_id": "medium_fyi_005", "difficulty": "medium", "subject": "System maintenance window - 2am-4am Saturday", "sender": "devops@company.com", "body": "Heads up: Database maintenance Saturday 2-4am. Brief service interruption expected. We'll send updates during the window.", "gold_label": "fyi", "rubric": {"tone": "professional", "keywords": ["maintenance", "window", "interruption"], "max_words": 80}},
-  {"task_id": "medium_reply_001", "difficulty": "medium", "subject": "Can you review the API design doc?", "sender": "engineer@company.com", "body": "Hi, I've drafted a new REST API design for the payment service. Would appreciate your feedback on the schema and error handling. Target deployment is next sprint.", "gold_label": "needs_reply", "rubric": {"tone": "professional", "keywords": ["review", "feedback", "appreciate"], "max_words": 150}},
-  {"task_id": "medium_reply_002", "difficulty": "medium", "subject": "Questions about the new database migration", "sender": "junior@company.com", "body": "Hi! I'm working on the database migration and have a few questions about the schema changes you proposed. Do you have 15 mins for a quick sync?", "gold_label": "needs_reply", "rubric": {"tone": "casual", "keywords": ["questions", "sync", "have"], "max_words": 120}},
-  {"task_id": "medium_reply_003", "difficulty": "medium", "subject": "Proposal for new microservice architecture", "sender": "architect@company.com", "body": "I've been thinking about how to scale our backend. Attached is a proposal for refactoring into microservices. Would love your thoughts on feasibility and timeline.", "gold_label": "needs_reply", "rubric": {"tone": "professional", "keywords": ["proposal", "thoughts", "feedback"], "max_words": 140}},
-  {"task_id": "medium_reply_004", "difficulty": "medium", "subject": "Coffee tomorrow?", "sender": "friend@company.com", "body": "Hey! It's been a while. Want to grab coffee tomorrow morning before work? Would love to catch up and hear what you're working on.", "gold_label": "needs_reply", "rubric": {"tone": "casual", "keywords": ["tomorrow", "catch up", "coffee"], "max_words": 100}},
-  {"task_id": "medium_reply_005", "difficulty": "medium", "subject": "Feedback on your presentation slides", "sender": "manager@company.com", "body": "Great work on the Q2 roadmap presentation! I have a few suggestions for the 'Risks' section. When could we sync to discuss?", "gold_label": "needs_reply", "rubric": {"tone": "professional", "keywords": ["feedback", "suggestions", "sync"], "max_words": 110}},
-  {"task_id": "hard_ambiguous_001", "difficulty": "hard", "subject": "Great, another meeting", "sender": "coworker@company.com", "body": "Just scheduled a sync for tomorrow at 3pm to discuss the new feature proposal. Your perspective on the timeline would be valuable. Let me know if you can make it.", "gold_label": "needs_reply", "rubric": {"tone": "casual", "keywords": ["scheduled", "confirm", "availability"], "max_words": 120}},
-  {"task_id": "hard_ambiguous_002", "difficulty": "hard", "subject": "Re: Quarterly review process", "sender": "hr@company.com", "body": "Sharing the updated review template with everyone. Same format as last year, just updated criteria. Check it out when you have time.", "gold_label": "fyi", "rubric": {"tone": "professional", "keywords": ["sharing", "template", "check"], "max_words": 90}},
-  {"task_id": "hard_ambiguous_003", "difficulty": "hard", "subject": "Thoughts on the new pricing strategy?", "sender": "product@company.com", "body": "We're considering a tiered pricing model. Would be great to get your input. Not urgent but would help finalize by end of week.", "gold_label": "needs_reply", "rubric": {"tone": "casual", "keywords": ["thoughts", "input", "strategy"], "max_words": 110}},
-  {"task_id": "hard_ambiguous_004", "difficulty": "hard", "subject": "Just wanted to say thanks", "sender": "team@company.com", "body": "Wanted to reach out and say thanks for all your help on the last project. The team really appreciated your contributions. Keep up the great work!", "gold_label": "fyi", "rubric": {"tone": "casual", "keywords": ["thanks", "appreciate", "congratulation"], "max_words": 80}},
-  {"task_id": "hard_ambiguous_005", "difficulty": "hard", "subject": "Wondering if you're available", "sender": "exec@company.com", "body": "Hi, I have a potential opportunity I'd like to discuss with you. Do you have 30 minutes this week? Flexible on timing.", "gold_label": "needs_reply", "rubric": {"tone": "formal", "keywords": ["opportunity", "available", "discuss"], "max_words": 90}},
-  {"task_id": "hard_ambiguous_006", "difficulty": "hard", "subject": "FW: Budget request from last week", "sender": "finance@company.com", "body": "Just following up on the budget request I sent last week. Want to make sure we've got everything we need for Q2 planning. Any blocker?", "gold_label": "needs_reply", "rubric": {"tone": "professional", "keywords": ["follow up", "request", "blocker"], "max_words": 100}},
-  {"task_id": "hard_ambiguous_007", "difficulty": "hard", "subject": "Thoughts?", "sender": "designer@company.com", "body": "Just uploaded the mockups to Figma. Would love to know what you think. Feel free to add comments directly in the file.", "gold_label": "needs_reply", "rubric": {"tone": "casual", "keywords": ["thoughts", "feedback", "comments"], "max_words": 80}},
-  {"task_id": "hard_ambiguous_008", "difficulty": "hard", "subject": "RE: Discussing project timeline", "sender": "stakeholder@client.com", "body": "Thanks for the update. We're a bit concerned about the original timeline estimate. Would you be able to share your assumptions? Want to make sure we're aligned.", "gold_label": "needs_reply", "rubric": {"tone": "formal", "keywords": ["timeline", "discussion", "clarify"], "max_words": 130}},
-  {"task_id": "hard_ambiguous_009", "difficulty": "hard", "subject": "Newsletter - March Edition", "sender": "marketing@company.com", "body": "This month's newsletter covers our new product launch, team highlights, and industry news. Read the full edition in your email or on our blog.", "gold_label": "fyi", "rubric": {"tone": "professional", "keywords": ["newsletter", "edition", "read"], "max_words": 85}},
-  {"task_id": "hard_ambiguous_010", "difficulty": "hard", "subject": "Can we talk?", "sender": "peer@company.com", "body": "I've been noticing some things on the project and would like to discuss them with you. Nothing urgent, just want to align on approach. Free Thursday?", "gold_label": "needs_reply", "rubric": {"tone": "casual", "keywords": ["talk", "discuss", "align"], "max_words": 100}},
-  {"task_id": "hard_context_001", "difficulty": "hard", "subject": "Your feedback was super helpful", "sender": "intern@company.com", "body": "Just wanted to say thanks for the detailed code review feedback last week. It really helped me understand best practices. Much appreciated!", "gold_label": "fyi", "rubric": {"tone": "casual", "keywords": ["thanks", "feedback", "appreciate"], "max_words": 80}},
-  {"task_id": "hard_context_002", "difficulty": "hard", "subject": "Update on the performance optimization", "sender": "engineer@company.com", "body": "Made good progress on the query optimization. Reduced load times by 40%. Running stress tests now. Will have detailed report by EOW.", "gold_label": "fyi", "rubric": {"tone": "professional", "keywords": ["update", "progress", "report"], "max_words": 90}},
-  {"task_id": "hard_context_003", "difficulty": "hard", "subject": "Need your input on competitor analysis", "sender": "research@company.com", "body": "Completed initial competitive landscape analysis. Would appreciate your perspective as someone closer to the market. Summary attached.", "gold_label": "needs_reply", "rubric": {"tone": "professional", "keywords": ["input", "perspective", "analysis"], "max_words": 110}},
-  {"task_id": "hard_context_004", "difficulty": "hard", "subject": "Celebrating 1 year milestone!", "sender": "admin@company.com", "body": "Today marks 1 year since you joined the team! Thanks for being an amazing contributor. Here's to many more years of great work together.", "gold_label": "fyi", "rubric": {"tone": "casual", "keywords": ["celebrate", "milestone", "thanks"], "max_words": 80}},
-  {"task_id": "hard_context_005", "difficulty": "hard", "subject": "Interested in the tech lead role?", "sender": "cto@company.com", "body": "We're opening a tech lead position and you came up in our discussion. This would involve leading a small team. Interested in exploring?", "gold_label": "needs_reply", "rubric": {"tone": "formal", "keywords": ["interested", "opportunity", "role"], "max_words": 100}},
-  {"task_id": "hard_context_006", "difficulty": "hard", "subject": "Re: Your proposal is great!", "sender": "manager@company.com", "body": "Love your approach to the refactoring project. Talked to the team and everyone agrees. Let's move forward. Great initiative!", "gold_label": "fyi", "rubric": {"tone": "casual", "keywords": ["great", "approved", "initiative"], "max_words": 80}},
-  {"task_id": "hard_context_007", "difficulty": "hard", "subject": "Meeting notes from last week", "sender": "admin@company.com", "body": "Attached are the meeting notes from our stakeholder sync last Tuesday. Please review and let me know if I missed anything important.", "gold_label": "needs_reply", "rubric": {"tone": "professional", "keywords": ["notes", "review", "feedback"], "max_words": 90}},
-  {"task_id": "hard_context_008", "difficulty": "hard", "subject": "Resource request for next quarter", "sender": "budget@company.com", "body": "Budget planning for Q3 is starting. If you need additional resources or budget for your team, please submit by Friday. Let me know if you have questions.", "gold_label": "needs_reply", "rubric": {"tone": "professional", "keywords": ["resource", "budget", "request"], "max_words": 110}},
-  {"task_id": "hard_context_009", "difficulty": "hard", "subject": "Just checking in", "sender": "manager@company.com", "body": "Haven't heard from you much lately. How are things going? Any blockers or challenges you need help with? Let's chat soon.", "gold_label": "needs_reply", "rubric": {"tone": "casual", "keywords": ["checking", "blockers", "chat"], "max_words": 85}},
-  {"task_id": "hard_context_010", "difficulty": "hard", "subject": "Blog post: Lessons learned from our incident", "sender": "devrel@company.com", "body": "Just published a blog post about lessons learned from last month's outage. Thought you might find it interesting given your role. Link in bio.", "gold_label": "fyi", "rubric": {"tone": "casual", "keywords": ["blog", "post", "published"], "max_words": 85}}
+  {
+    "task_id": "easy_spam_001",
+    "difficulty": "easy",
+    "subject": "FREE MONEY - Click here now!!!",
+    "sender": "noreply@spam.com",
+    "body": "Congratulations! You've won $1,000,000! Click this link to claim your prize immediately. Act now before it's gone!",
+    "gold_label": "junk",
+    "rubric": {
+      "tone": "casual",
+      "keywords": [
+        "free",
+        "click",
+        "immediately"
+      ],
+      "max_words": 50
+    },
+    "thread_history": [],
+    "timestamp": "2025-04-08T09:00:00Z"
+  },
+  {
+    "task_id": "easy_spam_002",
+    "difficulty": "easy",
+    "subject": "Your Amazon account has been compromised",
+    "sender": "security@amaz0n.com",
+    "body": "URGENT: Someone tried to access your account. Click here to verify your identity immediately or your account will be closed.",
+    "gold_label": "junk",
+    "rubric": {
+      "tone": "formal",
+      "keywords": [
+        "verify",
+        "urgent",
+        "click"
+      ],
+      "max_words": 60
+    },
+    "thread_history": [],
+    "timestamp": "2025-04-08T09:20:00Z"
+  },
+  {
+    "task_id": "easy_spam_003",
+    "difficulty": "easy",
+    "subject": "100% OFF - Limited Time Only!",
+    "sender": "deals@spammerz.com",
+    "body": "Buy now and save 100%. This is a one-time offer. Stock is almost gone. Click below to purchase before we run out!",
+    "gold_label": "junk",
+    "rubric": {
+      "tone": "casual",
+      "keywords": [
+        "limited",
+        "100%",
+        "click"
+      ],
+      "max_words": 55
+    },
+    "thread_history": [],
+    "timestamp": "2025-04-08T09:40:00Z"
+  },
+  {
+    "task_id": "easy_spam_004",
+    "difficulty": "easy",
+    "subject": "Lose Weight Fast - Doctors Hate This",
+    "sender": "health@spammail.com",
+    "body": "This one weird trick will make you lose 50 pounds in 1 week. Celebrities don't want you to know about this. Buy now!",
+    "gold_label": "junk",
+    "rubric": {
+      "tone": "casual",
+      "keywords": [
+        "lose",
+        "weight",
+        "trick"
+      ],
+      "max_words": 50
+    },
+    "thread_history": [],
+    "timestamp": "2025-04-08T10:00:00Z"
+  },
+  {
+    "task_id": "easy_spam_005",
+    "difficulty": "easy",
+    "subject": "Work From Home - Make $5000/week",
+    "sender": "jobs@scammail.net",
+    "body": "No experience needed. No boss. Just sign up and start earning $5000/week. Click to begin your journey!",
+    "gold_label": "junk",
+    "rubric": {
+      "tone": "casual",
+      "keywords": [
+        "work",
+        "home",
+        "$5000"
+      ],
+      "max_words": 50
+    },
+    "thread_history": [],
+    "timestamp": "2025-04-08T10:20:00Z"
+  },
+  {
+    "task_id": "easy_urgent_001",
+    "difficulty": "easy",
+    "subject": "CRITICAL: Production database down",
+    "sender": "oncall@company.com",
+    "body": "Production PostgreSQL cluster is down. All services returning 503. Starting failover now. ETA 5 minutes.",
+    "gold_label": "urgent",
+    "rubric": {
+      "tone": "formal",
+      "keywords": [
+        "critical",
+        "down",
+        "urgent"
+      ],
+      "max_words": 80
+    },
+    "thread_history": [],
+    "timestamp": "2025-04-08T10:40:00Z"
+  },
+  {
+    "task_id": "easy_urgent_002",
+    "difficulty": "easy",
+    "subject": "SECURITY ALERT: Unauthorized API access detected",
+    "sender": "security@company.com",
+    "body": "Unauthorized attempts to access our API detected from 203.45.67.89. Rate limited and blocked. Investigating now.",
+    "gold_label": "urgent",
+    "rubric": {
+      "tone": "formal",
+      "keywords": [
+        "security",
+        "unauthorized",
+        "alert"
+      ],
+      "max_words": 70
+    },
+    "thread_history": [],
+    "timestamp": "2025-04-08T11:00:00Z"
+  },
+  {
+    "task_id": "easy_urgent_003",
+    "difficulty": "easy",
+    "subject": "OUTAGE: Web servers not responding",
+    "sender": "devops@company.com",
+    "body": "All 5 web servers are down. Load balancer shows no healthy backends. Rebooting now. Sorry for disruption!",
+    "gold_label": "urgent",
+    "rubric": {
+      "tone": "formal",
+      "keywords": [
+        "outage",
+        "down",
+        "urgent"
+      ],
+      "max_words": 60
+    },
+    "thread_history": [],
+    "timestamp": "2025-04-08T11:20:00Z"
+  },
+  {
+    "task_id": "easy_urgent_004",
+    "difficulty": "easy",
+    "subject": "EMERGENCY: Data center power failure",
+    "sender": "dataops@provider.com",
+    "body": "Primary data center lost power. Immediate cutover to backup in progress. ETA 2 min for full recovery.",
+    "gold_label": "urgent",
+    "rubric": {
+      "tone": "formal",
+      "keywords": [
+        "emergency",
+        "power",
+        "urgent"
+      ],
+      "max_words": 70
+    },
+    "thread_history": [],
+    "timestamp": "2025-04-08T11:40:00Z"
+  },
+  {
+    "task_id": "easy_urgent_005",
+    "difficulty": "easy",
+    "subject": "CONTRACT: Signature needed by 5pm today",
+    "sender": "legal@company.com",
+    "body": "New vendor contract requires your signature to close the deal. Deadline is 5pm EST today. Please review and sign ASAP.",
+    "gold_label": "urgent",
+    "rubric": {
+      "tone": "formal",
+      "keywords": [
+        "signature",
+        "deadline",
+        "today"
+      ],
+      "max_words": 70
+    },
+    "thread_history": [],
+    "timestamp": "2025-04-08T12:00:00Z"
+  },
+  {
+    "task_id": "medium_fyi_001",
+    "difficulty": "medium",
+    "subject": "RE: Q2 planning update",
+    "sender": "manager@company.com",
+    "body": "Hi team, just completed the Q2 budget forecast. Shared in the wiki. FYI, no immediate action required. Review at your convenience.",
+    "gold_label": "fyi",
+    "rubric": {
+      "tone": "professional",
+      "keywords": [
+        "FYI",
+        "shared",
+        "no action"
+      ],
+      "max_words": 100
+    },
+    "thread_history": [],
+    "timestamp": "2025-04-08T12:20:00Z"
+  },
+  {
+    "task_id": "medium_fyi_002",
+    "difficulty": "medium",
+    "subject": "New office policy announcement",
+    "sender": "hr@company.com",
+    "body": "Starting next month, we're implementing flexible work hours. Full details are in the HR portal. Check it out when you get a chance.",
+    "gold_label": "fyi",
+    "rubric": {
+      "tone": "professional",
+      "keywords": [
+        "announcement",
+        "implementation",
+        "check"
+      ],
+      "max_words": 90
+    },
+    "thread_history": [],
+    "timestamp": "2025-04-08T12:40:00Z"
+  },
+  {
+    "task_id": "medium_fyi_003",
+    "difficulty": "medium",
+    "subject": "Quarterly earnings report released",
+    "sender": "investor@company.com",
+    "body": "Q1 2025 earnings report is now available on the investor relations page. Revenue up 20% YoY. Good news for the team!",
+    "gold_label": "fyi",
+    "rubric": {
+      "tone": "professional",
+      "keywords": [
+        "report",
+        "released",
+        "available"
+      ],
+      "max_words": 80
+    },
+    "thread_history": [],
+    "timestamp": "2025-04-08T13:00:00Z"
+  },
+  {
+    "task_id": "medium_fyi_004",
+    "difficulty": "medium",
+    "subject": "Team lunch reminder - Tomorrow at noon",
+    "sender": "ops@company.com",
+    "body": "Just a reminder: Team lunch is tomorrow at noon at the Italian place downtown. RSVP if you haven't already. Should be fun!",
+    "gold_label": "fyi",
+    "rubric": {
+      "tone": "casual",
+      "keywords": [
+        "reminder",
+        "lunch",
+        "tomorrow"
+      ],
+      "max_words": 70
+    },
+    "thread_history": [],
+    "timestamp": "2025-04-08T13:20:00Z"
+  },
+  {
+    "task_id": "medium_fyi_005",
+    "difficulty": "medium",
+    "subject": "System maintenance window - 2am-4am Saturday",
+    "sender": "devops@company.com",
+    "body": "Heads up: Database maintenance Saturday 2-4am. Brief service interruption expected. We'll send updates during the window.",
+    "gold_label": "fyi",
+    "rubric": {
+      "tone": "professional",
+      "keywords": [
+        "maintenance",
+        "window",
+        "interruption"
+      ],
+      "max_words": 80
+    },
+    "thread_history": [],
+    "timestamp": "2025-04-08T13:40:00Z"
+  },
+  {
+    "task_id": "medium_reply_001",
+    "difficulty": "medium",
+    "subject": "Can you review the API design doc?",
+    "sender": "engineer@company.com",
+    "body": "Hi, I've drafted a new REST API design for the payment service. Would appreciate your feedback on the schema and error handling. Target deployment is next sprint.",
+    "gold_label": "needs_reply",
+    "rubric": {
+      "tone": "professional",
+      "keywords": [
+        "review",
+        "feedback",
+        "appreciate"
+      ],
+      "max_words": 150
+    },
+    "thread_history": [],
+    "timestamp": "2025-04-08T14:00:00Z"
+  },
+  {
+    "task_id": "medium_reply_002",
+    "difficulty": "medium",
+    "subject": "Questions about the new database migration",
+    "sender": "junior@company.com",
+    "body": "Hi! I'm working on the database migration and have a few questions about the schema changes you proposed. Do you have 15 mins for a quick sync?",
+    "gold_label": "needs_reply",
+    "rubric": {
+      "tone": "casual",
+      "keywords": [
+        "questions",
+        "sync",
+        "have"
+      ],
+      "max_words": 120
+    },
+    "thread_history": [],
+    "timestamp": "2025-04-08T14:20:00Z"
+  },
+  {
+    "task_id": "medium_reply_003",
+    "difficulty": "medium",
+    "subject": "Proposal for new microservice architecture",
+    "sender": "architect@company.com",
+    "body": "I've been thinking about how to scale our backend. Attached is a proposal for refactoring into microservices. Would love your thoughts on feasibility and timeline.",
+    "gold_label": "needs_reply",
+    "rubric": {
+      "tone": "professional",
+      "keywords": [
+        "proposal",
+        "thoughts",
+        "feedback"
+      ],
+      "max_words": 140
+    },
+    "thread_history": [],
+    "timestamp": "2025-04-08T14:40:00Z"
+  },
+  {
+    "task_id": "medium_reply_004",
+    "difficulty": "medium",
+    "subject": "Coffee tomorrow?",
+    "sender": "friend@company.com",
+    "body": "Hey! It's been a while. Want to grab coffee tomorrow morning before work? Would love to catch up and hear what you're working on.",
+    "gold_label": "needs_reply",
+    "rubric": {
+      "tone": "casual",
+      "keywords": [
+        "tomorrow",
+        "catch up",
+        "coffee"
+      ],
+      "max_words": 100
+    },
+    "thread_history": [],
+    "timestamp": "2025-04-08T15:00:00Z"
+  },
+  {
+    "task_id": "medium_reply_005",
+    "difficulty": "medium",
+    "subject": "Feedback on your presentation slides",
+    "sender": "manager@company.com",
+    "body": "Great work on the Q2 roadmap presentation! I have a few suggestions for the 'Risks' section. When could we sync to discuss?",
+    "gold_label": "needs_reply",
+    "rubric": {
+      "tone": "professional",
+      "keywords": [
+        "feedback",
+        "suggestions",
+        "sync"
+      ],
+      "max_words": 110
+    },
+    "thread_history": [],
+    "timestamp": "2025-04-08T15:20:00Z"
+  },
+  {
+    "task_id": "hard_ambiguous_001",
+    "difficulty": "hard",
+    "subject": "Great, another meeting",
+    "sender": "coworker@company.com",
+    "body": "Just scheduled a sync for tomorrow at 3pm to discuss the new feature proposal. Your perspective on the timeline would be valuable. Let me know if you can make it.",
+    "gold_label": "needs_reply",
+    "rubric": {
+      "tone": "casual",
+      "keywords": [
+        "scheduled",
+        "confirm",
+        "availability"
+      ],
+      "max_words": 120
+    },
+    "thread_history": [],
+    "timestamp": "2025-04-08T15:40:00Z"
+  },
+  {
+    "task_id": "hard_ambiguous_002",
+    "difficulty": "hard",
+    "subject": "Re: Quarterly review process",
+    "sender": "hr@company.com",
+    "body": "Sharing the updated review template with everyone. Same format as last year, just updated criteria. Check it out when you have time.",
+    "gold_label": "fyi",
+    "rubric": {
+      "tone": "professional",
+      "keywords": [
+        "sharing",
+        "template",
+        "check"
+      ],
+      "max_words": 90
+    },
+    "thread_history": [],
+    "timestamp": "2025-04-08T16:00:00Z"
+  },
+  {
+    "task_id": "hard_ambiguous_003",
+    "difficulty": "hard",
+    "subject": "Thoughts on the new pricing strategy?",
+    "sender": "product@company.com",
+    "body": "We're considering a tiered pricing model. Would be great to get your input. Not urgent but would help finalize by end of week.",
+    "gold_label": "needs_reply",
+    "rubric": {
+      "tone": "casual",
+      "keywords": [
+        "thoughts",
+        "input",
+        "strategy"
+      ],
+      "max_words": 110
+    },
+    "thread_history": [],
+    "timestamp": "2025-04-08T16:20:00Z"
+  },
+  {
+    "task_id": "hard_ambiguous_004",
+    "difficulty": "hard",
+    "subject": "Just wanted to say thanks",
+    "sender": "team@company.com",
+    "body": "Wanted to reach out and say thanks for all your help on the last project. The team really appreciated your contributions. Keep up the great work!",
+    "gold_label": "fyi",
+    "rubric": {
+      "tone": "casual",
+      "keywords": [
+        "thanks",
+        "appreciate",
+        "congratulation"
+      ],
+      "max_words": 80
+    },
+    "thread_history": [],
+    "timestamp": "2025-04-08T16:40:00Z"
+  },
+  {
+    "task_id": "hard_ambiguous_005",
+    "difficulty": "hard",
+    "subject": "Wondering if you're available",
+    "sender": "exec@company.com",
+    "body": "Hi, I have a potential opportunity I'd like to discuss with you. Do you have 30 minutes this week? Flexible on timing.",
+    "gold_label": "needs_reply",
+    "rubric": {
+      "tone": "formal",
+      "keywords": [
+        "opportunity",
+        "available",
+        "discuss"
+      ],
+      "max_words": 90
+    },
+    "thread_history": [],
+    "timestamp": "2025-04-08T17:00:00Z"
+  },
+  {
+    "task_id": "hard_ambiguous_006",
+    "difficulty": "hard",
+    "subject": "FW: Budget request from last week",
+    "sender": "finance@company.com",
+    "body": "Just following up on the budget request I sent last week. Want to make sure we've got everything we need for Q2 planning. Any blocker?",
+    "gold_label": "needs_reply",
+    "rubric": {
+      "tone": "professional",
+      "keywords": [
+        "follow up",
+        "request",
+        "blocker"
+      ],
+      "max_words": 100
+    },
+    "thread_history": [],
+    "timestamp": "2025-04-08T17:20:00Z"
+  },
+  {
+    "task_id": "hard_ambiguous_007",
+    "difficulty": "hard",
+    "subject": "Thoughts?",
+    "sender": "designer@company.com",
+    "body": "Just uploaded the mockups to Figma. Would love to know what you think. Feel free to add comments directly in the file.",
+    "gold_label": "needs_reply",
+    "rubric": {
+      "tone": "casual",
+      "keywords": [
+        "thoughts",
+        "feedback",
+        "comments"
+      ],
+      "max_words": 80
+    },
+    "thread_history": [],
+    "timestamp": "2025-04-08T17:40:00Z"
+  },
+  {
+    "task_id": "hard_ambiguous_008",
+    "difficulty": "hard",
+    "subject": "RE: Discussing project timeline",
+    "sender": "stakeholder@client.com",
+    "body": "Thanks for the update. We're a bit concerned about the original timeline estimate. Would you be able to share your assumptions? Want to make sure we're aligned.",
+    "gold_label": "needs_reply",
+    "rubric": {
+      "tone": "formal",
+      "keywords": [
+        "timeline",
+        "discussion",
+        "clarify"
+      ],
+      "max_words": 130
+    },
+    "thread_history": [],
+    "timestamp": "2025-04-08T18:00:00Z"
+  },
+  {
+    "task_id": "hard_ambiguous_009",
+    "difficulty": "hard",
+    "subject": "Newsletter - March Edition",
+    "sender": "marketing@company.com",
+    "body": "This month's newsletter covers our new product launch, team highlights, and industry news. Read the full edition in your email or on our blog.",
+    "gold_label": "fyi",
+    "rubric": {
+      "tone": "professional",
+      "keywords": [
+        "newsletter",
+        "edition",
+        "read"
+      ],
+      "max_words": 85
+    },
+    "thread_history": [],
+    "timestamp": "2025-04-08T18:20:00Z"
+  },
+  {
+    "task_id": "hard_ambiguous_010",
+    "difficulty": "hard",
+    "subject": "Can we talk?",
+    "sender": "peer@company.com",
+    "body": "I've been noticing some things on the project and would like to discuss them with you. Nothing urgent, just want to align on approach. Free Thursday?",
+    "gold_label": "needs_reply",
+    "rubric": {
+      "tone": "casual",
+      "keywords": [
+        "talk",
+        "discuss",
+        "align"
+      ],
+      "max_words": 100
+    },
+    "thread_history": [],
+    "timestamp": "2025-04-08T18:40:00Z"
+  },
+  {
+    "task_id": "hard_context_001",
+    "difficulty": "hard",
+    "subject": "Your feedback was super helpful",
+    "sender": "intern@company.com",
+    "body": "Just wanted to say thanks for the detailed code review feedback last week. It really helped me understand best practices. Much appreciated!",
+    "gold_label": "fyi",
+    "rubric": {
+      "tone": "casual",
+      "keywords": [
+        "thanks",
+        "feedback",
+        "appreciate"
+      ],
+      "max_words": 80
+    },
+    "thread_history": [],
+    "timestamp": "2025-04-08T19:00:00Z"
+  },
+  {
+    "task_id": "hard_context_002",
+    "difficulty": "hard",
+    "subject": "Update on the performance optimization",
+    "sender": "engineer@company.com",
+    "body": "Made good progress on the query optimization. Reduced load times by 40%. Running stress tests now. Will have detailed report by EOW.",
+    "gold_label": "fyi",
+    "rubric": {
+      "tone": "professional",
+      "keywords": [
+        "update",
+        "progress",
+        "report"
+      ],
+      "max_words": 90
+    },
+    "thread_history": [],
+    "timestamp": "2025-04-08T19:20:00Z"
+  },
+  {
+    "task_id": "hard_context_003",
+    "difficulty": "hard",
+    "subject": "Need your input on competitor analysis",
+    "sender": "research@company.com",
+    "body": "Completed initial competitive landscape analysis. Would appreciate your perspective as someone closer to the market. Summary attached.",
+    "gold_label": "needs_reply",
+    "rubric": {
+      "tone": "professional",
+      "keywords": [
+        "input",
+        "perspective",
+        "analysis"
+      ],
+      "max_words": 110
+    },
+    "thread_history": [],
+    "timestamp": "2025-04-08T19:40:00Z"
+  },
+  {
+    "task_id": "hard_context_004",
+    "difficulty": "hard",
+    "subject": "Celebrating 1 year milestone!",
+    "sender": "admin@company.com",
+    "body": "Today marks 1 year since you joined the team! Thanks for being an amazing contributor. Here's to many more years of great work together.",
+    "gold_label": "fyi",
+    "rubric": {
+      "tone": "casual",
+      "keywords": [
+        "celebrate",
+        "milestone",
+        "thanks"
+      ],
+      "max_words": 80
+    },
+    "thread_history": [],
+    "timestamp": "2025-04-08T20:00:00Z"
+  },
+  {
+    "task_id": "hard_context_005",
+    "difficulty": "hard",
+    "subject": "Interested in the tech lead role?",
+    "sender": "cto@company.com",
+    "body": "We're opening a tech lead position and you came up in our discussion. This would involve leading a small team. Interested in exploring?",
+    "gold_label": "needs_reply",
+    "rubric": {
+      "tone": "formal",
+      "keywords": [
+        "interested",
+        "opportunity",
+        "role"
+      ],
+      "max_words": 100
+    },
+    "thread_history": [],
+    "timestamp": "2025-04-08T20:20:00Z"
+  },
+  {
+    "task_id": "hard_context_006",
+    "difficulty": "hard",
+    "subject": "Re: Your proposal is great!",
+    "sender": "manager@company.com",
+    "body": "Love your approach to the refactoring project. Talked to the team and everyone agrees. Let's move forward. Great initiative!",
+    "gold_label": "fyi",
+    "rubric": {
+      "tone": "casual",
+      "keywords": [
+        "great",
+        "approved",
+        "initiative"
+      ],
+      "max_words": 80
+    },
+    "thread_history": [],
+    "timestamp": "2025-04-08T20:40:00Z"
+  },
+  {
+    "task_id": "hard_context_007",
+    "difficulty": "hard",
+    "subject": "Meeting notes from last week",
+    "sender": "admin@company.com",
+    "body": "Attached are the meeting notes from our stakeholder sync last Tuesday. Please review and let me know if I missed anything important.",
+    "gold_label": "needs_reply",
+    "rubric": {
+      "tone": "professional",
+      "keywords": [
+        "notes",
+        "review",
+        "feedback"
+      ],
+      "max_words": 90
+    },
+    "thread_history": [],
+    "timestamp": "2025-04-08T21:00:00Z"
+  },
+  {
+    "task_id": "hard_context_008",
+    "difficulty": "hard",
+    "subject": "Resource request for next quarter",
+    "sender": "budget@company.com",
+    "body": "Budget planning for Q3 is starting. If you need additional resources or budget for your team, please submit by Friday. Let me know if you have questions.",
+    "gold_label": "needs_reply",
+    "rubric": {
+      "tone": "professional",
+      "keywords": [
+        "resource",
+        "budget",
+        "request"
+      ],
+      "max_words": 110
+    },
+    "thread_history": [],
+    "timestamp": "2025-04-08T21:20:00Z"
+  },
+  {
+    "task_id": "hard_context_009",
+    "difficulty": "hard",
+    "subject": "Just checking in",
+    "sender": "manager@company.com",
+    "body": "Haven't heard from you much lately. How are things going? Any blockers or challenges you need help with? Let's chat soon.",
+    "gold_label": "needs_reply",
+    "rubric": {
+      "tone": "casual",
+      "keywords": [
+        "checking",
+        "blockers",
+        "chat"
+      ],
+      "max_words": 85
+    },
+    "thread_history": [],
+    "timestamp": "2025-04-08T21:40:00Z"
+  },
+  {
+    "task_id": "hard_context_010",
+    "difficulty": "hard",
+    "subject": "Blog post: Lessons learned from our incident",
+    "sender": "devrel@company.com",
+    "body": "Just published a blog post about lessons learned from last month's outage. Thought you might find it interesting given your role. Link in bio.",
+    "gold_label": "fyi",
+    "rubric": {
+      "tone": "casual",
+      "keywords": [
+        "blog",
+        "post",
+        "published"
+      ],
+      "max_words": 85
+    },
+    "thread_history": [],
+    "timestamp": "2025-04-08T22:00:00Z"
+  },
+  {
+    "task_id": "task_11",
+    "subject": "CRITICAL: Database replication lag detected",
+    "sender": "alerts@platform.com",
+    "body": "Database read replicas are 2+ minutes behind primary. Queries may return stale data. Investigating root cause now.",
+    "thread_history": [],
+    "timestamp": "2025-04-08T10:45:00Z",
+    "difficulty": "easy",
+    "gold_label": "urgent",
+    "rubric": {
+      "tone": "formal",
+      "must_include": [
+        "acknowledgement",
+        "severity",
+        "timeline"
+      ],
+      "keywords": [
+        "database",
+        "urgent"
+      ],
+      "max_words": 100
+    }
+  },
+  {
+    "task_id": "task_12",
+    "subject": "Security Incident: Unauthorized API access detected",
+    "sender": "security@company.com",
+    "body": "Anomalous API activity detected from IP 192.0.2.15. Multiple failed auth attempts followed by 2 successful logins. Credential rotation in progress.",
+    "thread_history": [
+      "Previous security alert from yesterday"
+    ],
+    "timestamp": "2025-04-08T11:20:00Z",
+    "difficulty": "hard",
+    "gold_label": "urgent",
+    "rubric": {
+      "tone": "formal",
+      "must_include": [
+        "action",
+        "impact",
+        "next_steps"
+      ],
+      "keywords": [
+        "security",
+        "incident"
+      ],
+      "max_words": 120
+    }
+  },
+  {
+    "task_id": "task_13",
+    "subject": "System maintenance window extended until 14:00 UTC",
+    "sender": "ops@company.com",
+    "body": "Scheduled maintenance running longer than expected. Services will be unavailable until 14:00 UTC instead of 12:00. We apologize for the inconvenience.",
+    "thread_history": [
+      "Original maintenance window announced at 08:00"
+    ],
+    "timestamp": "2025-04-08T12:30:00Z",
+    "difficulty": "medium",
+    "gold_label": "urgent",
+    "rubric": {
+      "tone": "formal",
+      "must_include": [
+        "acknowledge",
+        "time",
+        "apology"
+      ],
+      "keywords": [
+        "maintenance",
+        "unavailable"
+      ],
+      "max_words": 80
+    }
+  },
+  {
+    "task_id": "task_14",
+    "subject": "Monthly design pattern workshop - April 15th",
+    "sender": "learning@company.com",
+    "body": "Reminder: Next month's design pattern workshop covers Adapter and Factory patterns. Registration link in calendar invite. No action needed if attending.",
+    "thread_history": [],
+    "timestamp": "2025-04-08T09:00:00Z",
+    "difficulty": "easy",
+    "gold_label": "fyi",
+    "rubric": {
+      "tone": "casual",
+      "must_include": [
+        "acknowledgement"
+      ],
+      "keywords": [
+        "workshop"
+      ],
+      "max_words": 60
+    }
+  },
+  {
+    "task_id": "task_15",
+    "subject": "Company Culture: Casual Friday clothing policy update",
+    "sender": "hr@company.com",
+    "body": "Starting next month, Casual Friday extends to include sneakers and athletic wear. No change to other weekdays. Updated employee handbook attached.",
+    "thread_history": [],
+    "timestamp": "2025-04-08T10:15:00Z",
+    "difficulty": "easy",
+    "gold_label": "fyi",
+    "rubric": {
+      "tone": "formal",
+      "must_include": [
+        "policy",
+        "date"
+      ],
+      "keywords": [
+        "casual",
+        "friday"
+      ],
+      "max_words": 70
+    }
+  },
+  {
+    "task_id": "task_16",
+    "subject": "Q2 Engineering metrics now available in dashboard",
+    "sender": "analytics@company.com",
+    "body": "Q2 engineering metrics are live on the analytics dashboard. Check deployment frequency, MTTR, and code review times. No action required, just FYI for your team.",
+    "thread_history": [
+      "Q1 metrics were released on similar date"
+    ],
+    "timestamp": "2025-04-08T13:45:00Z",
+    "difficulty": "medium",
+    "gold_label": "fyi",
+    "rubric": {
+      "tone": "casual",
+      "must_include": [
+        "metrics",
+        "link"
+      ],
+      "keywords": [
+        "dashboard",
+        "Q2"
+      ],
+      "max_words": 75
+    }
+  },
+  {
+    "task_id": "task_17",
+    "subject": "Vendor transition: Moving from Slack to Microsoft Teams",
+    "sender": "it-operations@company.com",
+    "body": "Company wide transition to Microsoft Teams will begin next month. Training videos and FAQs available on internal wiki. Slack will remain active for 3 months during transition.",
+    "thread_history": [
+      "Previous communication about partnership"
+    ],
+    "timestamp": "2025-04-08T15:00:00Z",
+    "difficulty": "hard",
+    "gold_label": "fyi",
+    "rubric": {
+      "tone": "formal",
+      "must_include": [
+        "timeline",
+        "resources"
+      ],
+      "keywords": [
+        "teams",
+        "transition"
+      ],
+      "max_words": 80
+    }
+  },
+  {
+    "task_id": "task_18",
+    "subject": "Coffee subsidies being reduced from $50 to $40/month",
+    "sender": "finance@company.com",
+    "body": "Effective next quarter, coffee subsidies reduce from $50 to $40/month due to budget reallocation. Questions? Contact HR.",
+    "thread_history": [],
+    "timestamp": "2025-04-08T14:30:00Z",
+    "difficulty": "easy",
+    "gold_label": "fyi",
+    "rubric": {
+      "tone": "casual",
+      "must_include": [
+        "amount",
+        "date"
+      ],
+      "keywords": [
+        "coffee",
+        "subsidy"
+      ],
+      "max_words": 50
+    }
+  },
+  {
+    "task_id": "task_19",
+    "subject": "Congratulations! You've won a FREE iPad Pro!",
+    "sender": "promotions@sketchy-rewards.com",
+    "body": "Click here to claim your prize! Limited time offer! You were selected from 1 million users. Verify your details now.",
+    "thread_history": [],
+    "timestamp": "2025-04-08T16:20:00Z",
+    "difficulty": "easy",
+    "gold_label": "junk",
+    "rubric": {
+      "tone": "casual",
+      "must_include": [
+        "ignore"
+      ],
+      "keywords": [
+        "spam"
+      ],
+      "max_words": 100
+    }
+  },
+  {
+    "task_id": "task_20",
+    "subject": "Increase your productivity 10x with this ONE weird trick",
+    "sender": "marketing@get-rich-quick.net",
+    "body": "Doctors HATE this! Productivity experts are furious about this secret. Buy now for just $99.99 and learn the trick today!",
+    "thread_history": [],
+    "timestamp": "2025-04-08T17:00:00Z",
+    "difficulty": "easy",
+    "gold_label": "junk",
+    "rubric": {
+      "tone": "casual",
+      "must_include": [],
+      "keywords": [
+        "spam",
+        "sales"
+      ],
+      "max_words": 200
+    }
+  },
+  {
+    "task_id": "task_21",
+    "subject": "FW: FW: FW: Check this out!!!",
+    "sender": "unknown-contact@freemail.com",
+    "body": "This is hilarious! Your friend Jerry sent this to me. Opens as exe file. Have fun! Can you believe this?? ",
+    "thread_history": [
+      "Multiple forwards from unknown sources"
+    ],
+    "timestamp": "2025-04-08T18:15:00Z",
+    "difficulty": "medium",
+    "gold_label": "junk",
+    "rubric": {
+      "tone": "casual",
+      "must_include": [],
+      "keywords": [
+        "spam",
+        "phishing"
+      ],
+      "max_words": 100
+    }
+  }
 ]
