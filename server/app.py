@@ -18,10 +18,32 @@ class EmailTriageEnv:
     """Email triage environment with 3 difficulty levels (easy, medium, hard)"""
 
     def __init__(self):
-        # Load tasks dataset
-        tasks_path = os.path.join(os.path.dirname(__file__), '..', 'tasks.json')
+        # Load tasks dataset - try multiple paths for compatibility
+        possible_paths = [
+            os.path.join(os.path.dirname(__file__), '..', 'tasks.json'),  # Local dev
+            '/app/tasks.json',  # Docker container
+            './tasks.json',  # Current directory
+            os.path.join(os.getcwd(), 'tasks.json'),  # CWD
+        ]
+        
+        tasks_path = None
+        for path in possible_paths:
+            if os.path.exists(path):
+                tasks_path = path
+                print(f"✓ Found tasks.json at: {path}")
+                break
+        
+        if tasks_path is None:
+            raise FileNotFoundError(
+                f"tasks.json not found. Tried: {possible_paths}\n"
+                f"Current working directory: {os.getcwd()}\n"
+                f"Script directory: {os.path.dirname(__file__)}"
+            )
+        
         with open(tasks_path, 'r') as f:
             self.tasks = json.load(f)
+        
+        print(f"✓ Loaded {len(self.tasks)} tasks from {tasks_path}")
 
         # Group by difficulty
         self.tasks_by_difficulty = {
@@ -29,6 +51,10 @@ class EmailTriageEnv:
             'medium': [t for t in self.tasks if t['difficulty'] == 'medium'],
             'hard': [t for t in self.tasks if t['difficulty'] == 'hard'],
         }
+        
+        print(f"✓ Task distribution - easy: {len(self.tasks_by_difficulty['easy'])}, "
+              f"medium: {len(self.tasks_by_difficulty['medium'])}, "
+              f"hard: {len(self.tasks_by_difficulty['hard'])}")
 
         self.state = None
         self.current_task = None
@@ -197,8 +223,27 @@ async def root():
             "reset": "POST /reset",
             "step": "POST /step",
             "state": "GET /state",
+            "health": "GET /health",
         }
     }
+
+
+@app.get("/health")
+async def health():
+    """Health check endpoint for deployment platforms"""
+    if env is None:
+        return {"status": "unhealthy", "error": init_error}, 503
+    return {"status": "healthy", "tasks_loaded": len(env.tasks)}
+
+
+@app.on_event("startup")
+async def startup_event():
+    """Log startup completion"""
+    if env is None:
+        print(f"⚠️  WARNING: Environment failed to initialize: {init_error}", file=sys.stderr)
+    else:
+        print(f"✅ Server ready. Environment has {len(env.tasks)} tasks loaded.")
+
 
 
 @app.post("/reset")
