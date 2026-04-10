@@ -185,17 +185,34 @@ class EmailTriageEnv:
         }
 
 
-# Global environment instance
+# Global environment instance - initialized on startup
 env = None
 init_error = None
+init_time = None
 
+def initialize_env():
+    """Initialize environment with error handling"""
+    global env, init_error, init_time
+    import time
+    start = time.time()
+    try:
+        env = EmailTriageEnv()
+        init_time = time.time() - start
+        print(f"✓ Environment initialized in {init_time:.2f}s", flush=True)
+        return True
+    except Exception as e:
+        init_error = str(e)
+        init_time = time.time() - start
+        print(f"✗ Environment init failed after {init_time:.2f}s: {e}", file=sys.stderr, flush=True)
+        traceback.print_exc()
+        return False
+
+# Try to initialize on module load
 try:
-    env = EmailTriageEnv()
-    print("✓ Environment initialized successfully")
+    initialize_env()
 except Exception as e:
+    print(f"✗ Critical error during module load: {e}", file=sys.stderr, flush=True)
     init_error = str(e)
-    print(f"✗ Error initializing environment: {e}", file=sys.stderr)
-    traceback.print_exc()
 
 # FastAPI app
 app = FastAPI(
@@ -224,6 +241,14 @@ async def root():
 async def health():
     """Liveness probe - must respond instantly"""
     return {"status": "alive"}
+
+
+@app.get("/readiness")
+async def readiness():
+    """Readiness probe - checks if environment is ready"""
+    if env is None:
+        return {"status": "not_ready", "error": init_error}, 503
+    return {"status": "ready", "tasks": len(env.tasks)}
 
 
 @app.post("/reset")
