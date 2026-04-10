@@ -231,6 +231,18 @@ app.add_middleware(
 )
 
 
+@app.on_event("startup")
+async def startup():
+    """Ensure environment is initialized on app startup"""
+    global env, init_error
+    if env is None:
+        print("[STARTUP] Initializing environment...", flush=True)
+        if not initialize_env():
+            print("[ERROR] Failed to initialize environment on startup", file=sys.stderr, flush=True)
+        else:
+            print("[STARTUP] Environment ready", flush=True)
+
+
 @app.get("/")
 async def root():
     """Root endpoint - simple and fast"""
@@ -247,8 +259,35 @@ async def health():
 async def readiness():
     """Readiness probe - checks if environment is ready"""
     if env is None:
-        return {"status": "not_ready", "error": init_error}, 503
+        # Wait a moment for initialization to complete on first call
+        import asyncio
+        await asyncio.sleep(0.5)
+    
+    if env is None:
+        return {"status": "initializing", "error": init_error}
     return {"status": "ready", "tasks": len(env.tasks)}
+
+
+@app.get("/api/config")
+async def api_config():
+    """OpenEnv API configuration"""
+    if env is None:
+        raise HTTPException(status_code=503, detail="Environment not initialized")
+    return {
+        "name": "email_triage_agent",
+        "version": "1.0.0",
+        "description": "Real-world email triage and smart reply environment",
+        "endpoints": {
+            "reset": "/reset",
+            "step": "/step",
+            "state": "/state"
+        },
+        "tasks": {
+            "easy": len(env.tasks_by_difficulty.get("easy", [])),
+            "medium": len(env.tasks_by_difficulty.get("medium", [])),
+            "hard": len(env.tasks_by_difficulty.get("hard", []))
+        }
+    }
 
 
 @app.post("/reset")
