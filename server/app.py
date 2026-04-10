@@ -5,7 +5,6 @@ import os
 import sys
 import traceback
 from fastapi import FastAPI, HTTPException
-from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 
@@ -217,36 +216,14 @@ app.add_middleware(
 
 @app.get("/")
 async def root():
-    return {
-        "name": "Email Triage OpenEnv",
-        "version": "1.0.0",
-        "endpoints": {
-            "reset": "POST /reset",
-            "step": "POST /step",
-            "state": "GET /state",
-            "health": "GET /health",
-        }
-    }
+    """Root endpoint - simple and fast"""
+    return {"status": "ok", "version": "1.0.0"}
 
 
 @app.get("/health")
 async def health():
-    """Health check endpoint for deployment platforms"""
-    try:
-        if env is None:
-            return JSONResponse(
-                status_code=503,
-                content={"status": "unhealthy", "error": init_error}
-            )
-        return JSONResponse(
-            status_code=200,
-            content={"status": "healthy", "tasks_loaded": len(env.tasks)}
-        )
-    except Exception as e:
-        return JSONResponse(
-            status_code=503,
-            content={"status": "error", "message": str(e)}
-        )
+    """Liveness probe - must respond instantly"""
+    return {"status": "alive"}
 
 
 @app.on_event("startup")
