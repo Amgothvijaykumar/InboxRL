@@ -1,7 +1,7 @@
 """
 Email Triage Environment - Baseline Inference Script
 Implements proper OpenEnv logging format with [START], [STEP], [END]
-Uses HuggingFace Inference API for LLM calls
+Uses OpenAI Client for LLM calls
 """
 import asyncio
 import json
@@ -9,12 +9,14 @@ import os
 import sys
 from typing import List
 import httpx
+from openai import OpenAI
 
 
-# Configuration from environment
-HF_TOKEN = os.environ.get("HF_TOKEN", "")
+# Configuration from environment - REQUIRED
+OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY", "")
+API_BASE_URL = os.environ.get("API_BASE_URL", "https://api.openai.com/v1")
+MODEL_NAME = os.environ.get("MODEL_NAME", "gpt-3.5-turbo")
 ENV_URL = os.environ.get("ENV_URL", "http://localhost:8000")
-HF_MODEL = os.environ.get("HF_MODEL", "meta-llama/Llama-2-7b-chat-hf")
 
 # Constants
 TASK_NAME = "email_triage"
@@ -93,11 +95,11 @@ async def step_env(client: httpx.Client, action: dict) -> dict:
 
 
 def get_model_action(
-    http_client: httpx.Client,
+    client: OpenAI,
     observation: dict, 
     step: int
 ) -> dict:
-    """Use HuggingFace Inference API to generate action from observation"""
+    """Use OpenAI Client to generate action from observation"""
     prompt = f"""
 You are an email triage agent. Classify this email and optionally draft a reply.
 
@@ -118,20 +120,13 @@ Respond in this exact JSON format:
 """
 
     try:
-        response = http_client.post(
-            f"https://api-inference.huggingface.co/models/{HF_MODEL}",
-            headers={"Authorization": f"Bearer {HF_TOKEN}"},
-            json={"inputs": prompt},
+        completion = client.chat.completions.create(
+            model=MODEL_NAME,
+            messages=[{"role": "user", "content": prompt}],
+            temperature=0.0,
             timeout=30.0
         )
-        response.raise_for_status()
-        result = response.json()
-        
-        # Extract text from HF response format
-        if isinstance(result, list) and len(result) > 0:
-            text = result[0].get("generated_text", "").strip()
-        else:
-            text = str(result).strip()
+        text = (completion.choices[0].message.content or "").strip()
         
         # Parse JSON response
         action_data = json.loads(text)
@@ -143,16 +138,22 @@ Respond in this exact JSON format:
         print(f"[DEBUG] Failed to parse model response: {text}", flush=True)
         return {"label": "fyi", "draft_reply": None}
     except Exception as e:
-        print(f"[DEBUG] HF API request failed: {e}", flush=True)
+        print(f"[DEBUG] OpenAI API request failed: {e}", flush=True)
         return {"label": "fyi", "draft_reply": None}
 
 
 async def main() -> None:
     """Main inference loop - Multi-episode evaluation"""
     # Verify configuration
-    if not HF_TOKEN:
-        print("[ERROR] HF_TOKEN environment variable is required", flush=True)
+    if not OPENAI_API_KEY:
+        print("[ERROR] OPENAI_API_KEY environment variable is required", flush=True)
         sys.exit(1)
+
+    # Initialize OpenAI client
+    client = OpenAI(
+        api_key=OPENAI_API_KEY,
+        base_url=API_BASE_URL
+    )
 
     http_client = httpx.Client()
     
@@ -162,8 +163,10 @@ async def main() -> None:
     episode_scores: List[float] = []
     total_steps = 0
     
-    print(f"[DEBUG] Using HuggingFace Inference API with model: {HF_MODEL}", flush=True)
-    log_start(task=TASK_NAME, env=BENCHMARK, model=HF_MODEL)
+    print(f"[DEBUG] Using OpenAI API", flush=True)
+    print(f"[DEBUG] Base URL: {API_BASE_URL}", flush=True)
+    print(f"[DEBUG] Model: {MODEL_NAME}", flush=True)
+    log_start(task=TASK_NAME, env=BENCHMARK, model=MODEL_NAME)
 
     try:
         for episode in range(1, num_episodes + 1):
@@ -178,7 +181,7 @@ async def main() -> None:
                 # Run single episode
                 for step in range(1, MAX_STEPS + 1):
                     # Get action from model
-                    action = get_model_action(http_client, observation, step)
+                    action = get_model_action(client, observation, step)
                     
                     # Execute action
                     result = await step_env(http_client, action)
