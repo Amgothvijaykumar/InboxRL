@@ -5,6 +5,7 @@ import os
 import sys
 import traceback
 from fastapi import FastAPI, HTTPException
+from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 
@@ -231,9 +232,21 @@ async def root():
 @app.get("/health")
 async def health():
     """Health check endpoint for deployment platforms"""
-    if env is None:
-        return {"status": "unhealthy", "error": init_error}, 503
-    return {"status": "healthy", "tasks_loaded": len(env.tasks)}
+    try:
+        if env is None:
+            return JSONResponse(
+                status_code=503,
+                content={"status": "unhealthy", "error": init_error}
+            )
+        return JSONResponse(
+            status_code=200,
+            content={"status": "healthy", "tasks_loaded": len(env.tasks)}
+        )
+    except Exception as e:
+        return JSONResponse(
+            status_code=503,
+            content={"status": "error", "message": str(e)}
+        )
 
 
 @app.on_event("startup")
@@ -243,6 +256,8 @@ async def startup_event():
         print(f"⚠️  WARNING: Environment failed to initialize: {init_error}", file=sys.stderr)
     else:
         print(f"✅ Server ready. Environment has {len(env.tasks)} tasks loaded.")
+    print("✅ FastAPI startup complete - server is ready for requests", flush=True)
+
 
 
 
