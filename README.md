@@ -1,6 +1,17 @@
+---
+title: Email Triage Agent
+emoji: 🏆
+colorFrom: purple
+colorTo: purple
+sdk: docker
+app_port: 8000
+pinned: false
+---
+
 # Email Triage & Smart Reply Agent — OpenEnv
 
 A real-world reinforcement learning environment for email classification, prioritization, and intelligent reply generation.
+
 
 ## Overview
 
