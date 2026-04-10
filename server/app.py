@@ -226,18 +226,6 @@ async def health():
     return {"status": "alive"}
 
 
-@app.on_event("startup")
-async def startup_event():
-    """Log startup completion"""
-    if env is None:
-        print(f"⚠️  WARNING: Environment failed to initialize: {init_error}", file=sys.stderr)
-    else:
-        print(f"✅ Server ready. Environment has {len(env.tasks)} tasks loaded.")
-    print("✅ FastAPI startup complete - server is ready for requests", flush=True)
-
-
-
-
 @app.post("/reset")
 async def reset():
     """Reset environment and return initial observation"""
