@@ -243,13 +243,14 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Initialize on module load (before uvicorn starts serving)
-print("[MODULE_LOAD] Initializing environment on import...", flush=True)
-try:
-    initialize_env()
-except Exception as e:
-    print(f"[MODULE_LOAD] Initialization failed: {e}", file=sys.stderr, flush=True)
-    traceback.print_exc()
+# Initialize on module load (BLOCKING - prevents uvicorn from serving until ready)
+print("[MODULE_LOAD] Initializing environment on import (BLOCKING)...", flush=True)
+success = initialize_env()
+if not success:
+    print(f"[MODULE_LOAD] ✗ FAILED: {init_error}", file=sys.stderr, flush=True)
+    # Still allow server to start but all endpoints will fail gracefully
+else:
+    print("[MODULE_LOAD] ✓ Environment ready before server binding", flush=True)
 
 
 @app.on_event("startup")
@@ -283,6 +284,21 @@ async def readiness():
     if env is None:
         return {"status": "initializing", "error": init_error}, 503
     return {"status": "ready", "tasks": len(env.tasks)}
+
+
+@app.get("/debug")
+async def debug():
+    """Debug endpoint - shows initialization status and file paths"""
+    return {
+        "env_initialized": env is not None,
+        "task_count": len(env.tasks) if env else 0,
+        "init_error": init_error,
+        "init_time": init_time,
+        "cwd": os.getcwd(),
+        "script_dir": os.path.dirname(__file__),
+        "tasks_file_exists": os.path.exists(os.path.join(os.getcwd(), 'tasks.json')),
+        "app_tasks_file_exists": os.path.exists('/app/tasks.json'),
+    }
 
 
 @app.get("/api/config")
