@@ -213,7 +213,7 @@ def initialize_env():
         traceback.print_exc()
         return False
 
-# FastAPI app - created BEFORE initialization so uvicorn can bind immediately
+# FastAPI app - FastAPI must be created first
 app = FastAPI(
     title="Email Triage OpenEnv",
     description="Real-world email classification and reply generation environment",
@@ -229,20 +229,24 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Initialize on module load (before uvicorn starts serving)
+print("[MODULE_LOAD] Initializing environment on import...", flush=True)
+try:
+    initialize_env()
+except Exception as e:
+    print(f"[MODULE_LOAD] Initialization failed: {e}", file=sys.stderr, flush=True)
+    traceback.print_exc()
+
 
 @app.on_event("startup")
 async def startup():
-    """Initialize environment in async startup - server is already bound to port and accepting requests"""
-    import asyncio
+    """Startup event - validate environment is initialized"""
     global env, init_error
-    print("[STARTUP] Server bound to port. Initializing environment...", flush=True)
-    # Run in thread pool so we don't block the event loop
-    loop = asyncio.get_event_loop()
-    success = await loop.run_in_executor(None, initialize_env)
-    if success:
-        print("[STARTUP] Environment ready ✓", flush=True)
-    else:
-        print(f"[STARTUP] Environment init failed: {init_error}", file=sys.stderr, flush=True)
+    print("[STARTUP] APP startup event", flush=True)
+    if env is None:
+        print("[STARTUP] WARNING: env is None, retrying initialization", file=sys.stderr, flush=True)
+        initialize_env()
+    print(f"[STARTUP] Environment status: {'ready' if env is not None else 'NOT READY'}", flush=True)
 
 
 @app.get("/")
