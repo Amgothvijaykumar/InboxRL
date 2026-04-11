@@ -1,5 +1,5 @@
 """Email Triage Environment - OpenEnv Models"""
-from typing import Optional, Literal, List
+from typing import Optional, Literal, List, Dict, Any
 from pydantic import BaseModel, Field
 
 try:
@@ -47,4 +47,15 @@ class EmailReward(BaseModel):
     reply_score: float = Field(..., ge=0.0, le=1.0, description="Reply quality (0-1)")
     reward: float = Field(..., ge=0.0, le=1.0, description="Combined reward")
     done: bool = Field(..., description="Episode complete")
-    info: dict = Field(default_factory=dict, description="Additional info")
+    info: Dict[str, Any] = Field(default_factory=dict, description="Additional info")
+
+
+class StepResult(BaseModel):
+    """Full step() return value per OpenEnv spec: observation + reward + done + info"""
+    observation: EmailObservation = Field(..., description="Current environment observation")
+    reward: float = Field(..., ge=0.0, le=1.0, description="Combined reward signal")
+    done: bool = Field(..., description="Episode termination flag")
+    info: Dict[str, Any] = Field(default_factory=dict, description="Additional metadata")
+    # Detailed reward breakdown (bonus fields)
+    label_score: float = Field(..., ge=0.0, le=1.0, description="Label accuracy (0-1)")
+    reply_score: float = Field(..., ge=0.0, le=1.0, description="Reply quality (0-1)")

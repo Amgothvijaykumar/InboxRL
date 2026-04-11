@@ -4,14 +4,15 @@ import random
 import os
 import sys
 import traceback
-from fastapi import FastAPI, HTTPException
+from typing import Optional
+from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 
 # Add parent directory to path to ensure imports work
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from models import EmailObservation, EmailAction, EmailReward
+from models import EmailObservation, EmailAction, EmailReward, StepResult
 
 
 class EmailTriageEnv:
@@ -58,6 +59,7 @@ class EmailTriageEnv:
 
         self.state = None
         self.current_task = None
+        self.current_observation = None  # store for step() to return
 
     def reset(self) -> EmailObservation:
         """Reset environment and return initial observation"""
@@ -75,7 +77,7 @@ class EmailTriageEnv:
             'done': False,
         }
 
-        return EmailObservation(
+        observation = EmailObservation(
             task_id=self.current_task['task_id'],
             subject=self.current_task['subject'],
             sender=self.current_task['sender'],
@@ -84,6 +86,8 @@ class EmailTriageEnv:
             thread_history=self.current_task.get('thread_history', []),
             timestamp=self.current_task.get('timestamp', '2025-04-08T00:00:00Z')
         )
+        self.current_observation = observation  # cache for step() to return
+        return observation
 
     def step(self, action: EmailAction) -> EmailReward:
         """Process action and return reward"""
@@ -109,9 +113,9 @@ class EmailTriageEnv:
         self.state['step_count'] += 1
         self.state['done'] = True
 
-        return EmailReward(
-            label_score=round(label_score, 2),
-            reply_score=round(reply_score, 2),
+        # OpenEnv spec: step() must return observation + reward + done + info
+        return StepResult(
+            observation=self.current_observation,
             reward=reward,
             done=True,
             info={
@@ -119,7 +123,9 @@ class EmailTriageEnv:
                 'difficulty': self.state['difficulty'],
                 'gold_label': self.state['gold_label'],
                 'predicted_label': action.label,
-            }
+            },
+            label_score=round(label_score, 2),
+            reply_score=round(reply_score, 2),
         )
 
     def score_reply(self, draft_reply: str, rubric: dict) -> float:
@@ -291,11 +297,36 @@ async def api_config():
 
 
 @app.post("/reset")
-async def reset():
+async def reset(difficulty: Optional[str] = Query(default=None, description="Force a specific difficulty: easy, medium, hard")):
     """Reset environment and return initial observation"""
     if env is None:
         raise HTTPException(status_code=500, detail=f"Environment not initialized: {init_error}")
     try:
+        # If a valid difficulty is requested, temporarily override selection
+        if difficulty and difficulty in ("easy", "medium", "hard"):
+            tasks_for_difficulty = env.tasks_by_difficulty.get(difficulty, [])
+            if tasks_for_difficulty:
+                env.current_task = random.choice(tasks_for_difficulty)
+                env.state = {
+                    'task_id': env.current_task['task_id'],
+                    'difficulty': difficulty,
+                    'gold_label': env.current_task['gold_label'],
+                    'rubric': env.current_task.get('rubric', {}),
+                    'step_count': 0,
+                    'done': False,
+                }
+                from models import EmailObservation
+                observation = EmailObservation(
+                    task_id=env.current_task['task_id'],
+                    subject=env.current_task['subject'],
+                    sender=env.current_task['sender'],
+                    body=env.current_task['body'],
+                    difficulty=difficulty,
+                    thread_history=env.current_task.get('thread_history', []),
+                    timestamp=env.current_task.get('timestamp', '2025-04-08T00:00:00Z')
+                )
+                env.current_observation = observation
+                return observation.model_dump()
         observation = env.reset()
         return observation.model_dump()
     except Exception as e:

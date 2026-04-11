@@ -6,6 +6,8 @@ colorTo: purple
 sdk: docker
 app_port: 8000
 pinned: false
+tags:
+  - openenv
 ---
 
 # Email Triage & Smart Reply Agent — OpenEnv
@@ -145,19 +147,26 @@ docker run -p 8000:8000 -e OPENAI_API_KEY=$OPENAI_API_KEY email_triage_agent
 
 ### Set Environment Variables
 
-```bash
-export OPENAI_API_KEY="sk-..."
-export MODEL_NAME="gpt-4"
-export API_BASE_URL="https://api.openai.com/v1"
-export ENV_URL="http://localhost:8000"
-```
+The following **three variables are required** by the OpenEnv submission spec:
 
-Or for HuggingFace router:
+| Variable | Description |
+|----------|-------------|
+| `HF_TOKEN` | Your Hugging Face token — used as `api_key` when calling the HF inference router |
+| `API_BASE_URL` | LLM API endpoint (HF router or OpenAI) |
+| `MODEL_NAME` | Model identifier to use for inference |
 
 ```bash
-export OPENAI_API_KEY=$HF_TOKEN
+# Option A: HuggingFace router (recommended for HF Space evaluation)
+export HF_TOKEN="hf_..."
 export API_BASE_URL="https://router.huggingface.co/v1"
 export MODEL_NAME="meta-llama/Llama-3.1-8B-Instruct"
+export ENV_URL="http://localhost:8000"
+
+# Option B: OpenAI directly (local testing)
+export OPENAI_API_KEY="sk-..."
+export API_BASE_URL="https://api.openai.com/v1"
+export MODEL_NAME="gpt-4"
+export ENV_URL="http://localhost:8000"
 ```
 
 ### Run Baseline

@@ -91,7 +91,15 @@ models:
 constraints:
   max_episode_steps: 1
   max_runtime_seconds: 300
-  required_api_key: OPENAI_API_KEY
+  required_env_vars:
+    - name: HF_TOKEN
+      description: "HuggingFace token used as api_key for HF inference router (OpenAI-compatible)"
+    - name: API_BASE_URL
+      description: "LLM API endpoint (e.g. https://router.huggingface.co/v1)"
+    - name: MODEL_NAME
+      description: "Model identifier for inference (e.g. meta-llama/Llama-3.1-8B-Instruct)"
+  # Legacy single-var fields (kept for backward compat)
+  required_api_key: HF_TOKEN
   required_model: MODEL_NAME
   base_url: API_BASE_URL
 
