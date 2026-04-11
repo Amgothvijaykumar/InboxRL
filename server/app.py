@@ -243,25 +243,25 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Initialize on module load (BLOCKING - prevents uvicorn from serving until ready)
-print("[MODULE_LOAD] Initializing environment on import (BLOCKING)...", flush=True)
-success = initialize_env()
-if not success:
-    print(f"[MODULE_LOAD] ✗ FAILED: {init_error}", file=sys.stderr, flush=True)
-    # Still allow server to start but all endpoints will fail gracefully
-else:
-    print("[MODULE_LOAD] ✓ Environment ready before server binding", flush=True)
+# Try to initialize on module load (non-blocking, uvicorn starts regardless)
+print("[MODULE_LOAD] Attempting initialization on import...", flush=True)
+initialize_env()  # Sets env, init_error, init_time globally
 
 
 @app.on_event("startup")
 async def startup():
-    """Startup event - validate environment is initialized"""
+    """Startup event - ensure environment is ready"""
     global env, init_error
-    print("[STARTUP] APP startup event", flush=True)
+    print("[STARTUP] FastAPI startup event fired", flush=True)
     if env is None:
-        print("[STARTUP] WARNING: env is None, retrying initialization", file=sys.stderr, flush=True)
+        print(f"[STARTUP] WARNING: env is None, init_error={init_error}", file=sys.stderr, flush=True)
+        print("[STARTUP] Attempting initialization during startup...", flush=True)
         initialize_env()
-    print(f"[STARTUP] Environment status: {'ready' if env is not None else 'NOT READY'}", flush=True)
+    
+    if env is not None:
+        print(f"[STARTUP] ✓ Environment ready: {len(env.tasks)} tasks loaded", flush=True)
+    else:
+        print(f"[STARTUP] ✗ Environment still not ready: {init_error}", file=sys.stderr, flush=True)
 
 
 @app.get("/")
@@ -326,20 +326,24 @@ async def api_config():
 @app.post("/reset")
 async def reset():
     """Reset environment and return initial observation"""
+    global env, init_error
+    
+    # If env not ready yet, try one more time
     if env is None:
-        print(f"[/reset] ERROR: env is None, init_error={init_error}", file=sys.stderr, flush=True)
-        raise HTTPException(status_code=503, detail="Environment not initialized")
+        print(f"[/reset] env is None, attempting initialization...", file=sys.stderr, flush=True)
+        initialize_env()
+    
+    if env is None:
+        print(f"[/reset] FATAL: env is still None after retry. init_error={init_error}", file=sys.stderr, flush=True)
+        raise HTTPException(status_code=503, detail=f"Environment not initialized: {init_error}")
     
     try:
-        print("[/reset] Calling env.reset()", flush=True)
         observation = env.reset()
-        result = observation.model_dump()
-        print(f"[/reset] SUCCESS: returning observation", flush=True)
-        return result
+        return observation.model_dump()
     except Exception as e:
-        print(f"[/reset] ERROR: {type(e).__name__}: {e}", file=sys.stderr, flush=True)
+        print(f"[/reset] Exception: {type(e).__name__}: {e}", file=sys.stderr, flush=True)
         traceback.print_exc(file=sys.stderr)
-        raise HTTPException(status_code=500, detail=f"Reset failed: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 @app.post("/step")
