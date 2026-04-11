@@ -21,30 +21,38 @@ class EmailTriageEnv:
     def __init__(self):
         # Load tasks dataset - try multiple paths for compatibility
         possible_paths = [
-            os.path.join(os.path.dirname(__file__), '..', 'tasks.json'),  # Local dev
-            '/app/tasks.json',  # Docker container
+            '/app/tasks.json',  # Docker container (first priority)
+            os.path.join(os.path.dirname(__file__), '..', 'tasks.json'),  # Relative to this file
+            os.path.join(os.getcwd(), 'tasks.json'),  # Current working directory
             './tasks.json',  # Current directory
-            os.path.join(os.getcwd(), 'tasks.json'),  # CWD
+            'tasks.json',  # Relative to pwd
         ]
         
         tasks_path = None
+        print(f"[INIT] Searching for tasks.json...", flush=True)
         for path in possible_paths:
-            if os.path.exists(path):
+            abs_path = os.path.abspath(path)
+            exists = os.path.exists(path)
+            print(f"[INIT]   Checking {abs_path}: {exists}", flush=True)
+            if exists:
                 tasks_path = path
-                print(f"✓ Found tasks.json at: {path}")
+                print(f"[INIT] ✓ Found tasks.json at: {os.path.abspath(path)}", flush=True)
                 break
         
         if tasks_path is None:
-            raise FileNotFoundError(
-                f"tasks.json not found. Tried: {possible_paths}\n"
+            error_msg = (
+                f"tasks.json not found. Tried:\n"
+                f"  {chr(10).join(f'  - {os.path.abspath(p)}' for p in possible_paths)}\n"
                 f"Current working directory: {os.getcwd()}\n"
                 f"Script directory: {os.path.dirname(__file__)}"
             )
+            raise FileNotFoundError(error_msg)
         
+        print(f"[INIT] Loading tasks from {os.path.abspath(tasks_path)}...", flush=True)
         with open(tasks_path, 'r') as f:
             self.tasks = json.load(f)
         
-        print(f"✓ Loaded {len(self.tasks)} tasks from {tasks_path}")
+        print(f"[INIT] ✓ Loaded {len(self.tasks)} tasks", flush=True)
 
         # Group by difficulty
         self.tasks_by_difficulty = {
@@ -202,15 +210,21 @@ def initialize_env():
     import time
     start = time.time()
     try:
+        print("[INIT] Starting EmailTriageEnv initialization...", flush=True)
+        print(f"[INIT] Current working directory: {os.getcwd()}", flush=True)
+        print(f"[INIT] __file__ = {__file__}", flush=True)
+        
         env = EmailTriageEnv()
+        
         init_time = time.time() - start
         print(f"✓ Environment initialized in {init_time:.2f}s", flush=True)
         return True
     except Exception as e:
         init_error = str(e)
         init_time = time.time() - start
-        print(f"✗ Environment init failed after {init_time:.2f}s: {e}", file=sys.stderr, flush=True)
-        traceback.print_exc()
+        print(f"✗ Environment init failed after {init_time:.2f}s", file=sys.stderr, flush=True)
+        print(f"✗ Exception: {type(e).__name__}: {e}", file=sys.stderr, flush=True)
+        traceback.print_exc(file=sys.stderr)
         return False
 
 # FastAPI app - FastAPI must be created first
