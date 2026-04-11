@@ -266,7 +266,9 @@ async def startup():
 @app.get("/")
 async def root():
     """Root endpoint - simple and fast"""
-    return {"status": "ok", "version": "1.0.0"}
+    if env is None:
+        return {"status": "initializing", "error": init_error}, 503
+    return {"status": "ok", "version": "1.0.0", "tasks": len(env.tasks)}
 
 
 @app.get("/health")
