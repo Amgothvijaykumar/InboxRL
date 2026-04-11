@@ -14,8 +14,8 @@ from openai import OpenAI
 
 # Configuration from environment - REQUIRED
 # HF_TOKEN is the primary credential when running on/via HuggingFace
-# Falls back to OPENAI_API_KEY for local OpenAI usage
-HF_TOKEN = os.environ.get("HF_TOKEN", "")
+# NO default value for HF_TOKEN (per OpenEnv submission requirements)
+HF_TOKEN = os.environ.get("HF_TOKEN")          # no default — must be set explicitly
 OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY", "")
 API_KEY = HF_TOKEN or OPENAI_API_KEY  # HF_TOKEN takes priority
 
