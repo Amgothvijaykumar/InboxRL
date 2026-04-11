@@ -265,12 +265,7 @@ async def health():
 async def readiness():
     """Readiness probe - checks if environment is ready"""
     if env is None:
-        # Wait a moment for initialization to complete on first call
-        import asyncio
-        await asyncio.sleep(0.5)
-    
-    if env is None:
-        return {"status": "initializing", "error": init_error}
+        return {"status": "initializing", "error": init_error}, 503
     return {"status": "ready", "tasks": len(env.tasks)}
 
 
@@ -297,42 +292,22 @@ async def api_config():
 
 
 @app.post("/reset")
-async def reset(difficulty: Optional[str] = Query(default=None, description="Force a specific difficulty: easy, medium, hard")):
+async def reset():
     """Reset environment and return initial observation"""
     if env is None:
-        raise HTTPException(status_code=500, detail=f"Environment not initialized: {init_error}")
+        print(f"[/reset] ERROR: env is None, init_error={init_error}", file=sys.stderr, flush=True)
+        raise HTTPException(status_code=503, detail="Environment not initialized")
+    
     try:
-        # If a valid difficulty is requested, temporarily override selection
-        if difficulty and difficulty in ("easy", "medium", "hard"):
-            tasks_for_difficulty = env.tasks_by_difficulty.get(difficulty, [])
-            if tasks_for_difficulty:
-                env.current_task = random.choice(tasks_for_difficulty)
-                env.state = {
-                    'task_id': env.current_task['task_id'],
-                    'difficulty': difficulty,
-                    'gold_label': env.current_task['gold_label'],
-                    'rubric': env.current_task.get('rubric', {}),
-                    'step_count': 0,
-                    'done': False,
-                }
-                from models import EmailObservation
-                observation = EmailObservation(
-                    task_id=env.current_task['task_id'],
-                    subject=env.current_task['subject'],
-                    sender=env.current_task['sender'],
-                    body=env.current_task['body'],
-                    difficulty=difficulty,
-                    thread_history=env.current_task.get('thread_history', []),
-                    timestamp=env.current_task.get('timestamp', '2025-04-08T00:00:00Z')
-                )
-                env.current_observation = observation
-                return observation.model_dump()
+        print("[/reset] Calling env.reset()", flush=True)
         observation = env.reset()
-        return observation.model_dump()
+        result = observation.model_dump()
+        print(f"[/reset] SUCCESS: returning observation", flush=True)
+        return result
     except Exception as e:
-        print(f"✗ Error in /reset: {e}", file=sys.stderr)
-        traceback.print_exc()
-        raise HTTPException(status_code=500, detail=str(e))
+        print(f"[/reset] ERROR: {type(e).__name__}: {e}", file=sys.stderr, flush=True)
+        traceback.print_exc(file=sys.stderr)
+        raise HTTPException(status_code=500, detail=f"Reset failed: {str(e)}")
 
 
 @app.post("/step")
